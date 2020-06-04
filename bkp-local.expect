@@ -1,0 +1,48 @@
+#!/usr/bin/expect
+# -----------------------------------------------------------------------------------
+# Author:   DeaDSouL (Mubarak Alrashidi)
+# URL:      https://unix.cafe/wp/en/2020/06/how-to-backup-your-website-from-terminal/
+# GitHub:   https://github.com/DeaDSouL/unix.cafe_website-backup
+# Twitter:  https://twitter.com/_DeaDSouL_
+# License:  GPLv3
+# -----------------------------------------------------------------------------------
+# This file should be on your local computer.
+# -----------------------------------------------------------------------------------
+
+set timeout -1
+
+# grab the password
+stty -echo
+puts " "
+send_user -- "Enter your ssh password: "
+expect_user -re "(.*)\n"
+send_user "\n"
+stty echo
+set SSHPASS $expect_out(1,string)
+
+# configuration
+set SRV_USER your_username
+set SRV_HOST your_server_host
+set SRV_BKP_SCRIPT path_to_bkp_on_server
+set SRV_BACKUPS_DIR path_to_backups_on_server_with_trailing_slash
+set LOCAL_ARCHIVE_DIR path_to_local_archive_with_trailing_slash
+
+# ask bkp on server to take a backup
+puts " "
+puts "Connecting to website.."
+spawn ssh -t $SRV_USER@$SRV_HOST "$SRV_BKP_SCRIPT"
+expect {
+    "Enter passphrase for key" { send -- "$SSHPASS\r" }
+    "password" { send -- "$SSHPASS\r" }
+}
+interact
+
+# download the taken backup
+puts " "
+puts "Downloading the backups.."
+spawn rsync -avhPe 'ssh' $SRV_USER@$SRV_HOST:"$SRV_BACKUPS_DIR" "$LOCAL_ARCHIVE_DIR"
+expect {
+    "Enter passphrase for key" { send -- "$SSHPASS\r" }
+    "password" { send -- "$SSHPASS\r" }
+}
+interact
