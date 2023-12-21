@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------------------
 # Author:   DeaDSouL (Mubarak Alrashidi)
 # URL:      https://unix.cafe/wp/en/2020/06/how-to-backup-your-website-from-terminal/
-# GitHub:   https://github.com/DeaDSouL/unix.cafe_website-backup
+# GitLab:   https://gitlab.com/unix.cafe/website-backup
 # Twitter:  https://twitter.com/_DeaDSouL_
 # License:  GPLv3
 # -----------------------------------------------------------------------------------
